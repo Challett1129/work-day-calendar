@@ -98,7 +98,6 @@ checkHour = function(hour, scheduleInfo) {
     }
 }
 
-console.log(currentDate);
 let saveTasks = function() {
      localStorage.setItem("tasks", JSON.stringify(schedule));
 }
