@@ -1,4 +1,3 @@
-console.log('hello world');
 const currentDay = $('#currentDay');
 
 //array of hours with am/pm, id's, the hour it is, and a time for moment.js to read. 
@@ -82,7 +81,9 @@ let schedule = [
     // }
 ]
 
-
+if(localStorage.getItem("scheduleHistory")){
+    schedule = JSON.parse(localStorage.getItem("scheduleHistory"))
+}
 
 
 // pass the schedule info through plus the time of the array to determine what class to add to our schedule
@@ -98,8 +99,16 @@ checkHour = function(hour, scheduleInfo) {
     }
 }
 //saves tasks to local storage as a string
-let saveTasks = function() {
-     localStorage.setItem("tasks", JSON.stringify(schedule));
+let saveTasks = function(e) {
+    //  localStorage.setItem("tasks", JSON.stringify(schedule));
+    e.preventDefault()
+    // console.log($(this).prev().children().val())
+    // console.log($(this).prev().children().attr("id"))
+
+    let idFromFrontEnd = parseInt($(this).prev().children().attr("id"))
+    
+    schedule[idFromFrontEnd].text = $(this).prev().children().val()
+    localStorage.setItem("scheduleHistory", JSON.stringify(schedule));
 }
 
 //creates the row and column for each hour, description, and save button
@@ -107,23 +116,23 @@ schedule.forEach(function(eachHour) {
     //creates a form for each hour so we can insert a textarea inside of the description class
     const row = $('<form>').addClass('row');
     $(".container").append(row);
-
+    //create div 
     const hour = $("<div>").addClass("col-1 hour").text(`${eachHour.hour}${eachHour.latin}`);
-    console.log(hour);
-    //does not work 
-    // $(".row").append(hour);
+    // console.log(hour);
+
     //create div for hour activities to be displayed in 
     const hourDescription = $("<div>").addClass("col-10 description")
     //create textarea to be able to write in activities
     const scheduleInfo = $("<textarea>")
+    scheduleInfo.val(eachHour.text)
 
     hourDescription.append(scheduleInfo);
 
 
     scheduleInfo.attr("id", eachHour.id);
-    console.log(scheduleInfo.attr("id"));
+    // console.log(scheduleInfo.attr("id"));
 
-    console.log(checkHour(eachHour.time, scheduleInfo));
+    checkHour(eachHour.time, scheduleInfo)
 
     //create save button and icon 
     const saveButton = $("<button>").addClass("saveBtn");
@@ -131,8 +140,10 @@ schedule.forEach(function(eachHour) {
     saveButton.append(saveImg);
     // console.log(saveButton);
     row.append(hour, hourDescription, saveButton);
+
 })
 //set current date and append it to the screen 
+$(".saveBtn").on("click", saveTasks)
 let currentDate = moment().format("dddd MMMM Do"); 
 currentDay.append(currentDate);
 
