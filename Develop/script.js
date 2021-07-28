@@ -82,7 +82,7 @@ let schedule = [
     // }
 ]
 
-//set current date and append it to the screen 
+
 
 
 // pass the schedule info through plus the time of the array to determine what class to add to our schedule
@@ -97,7 +97,7 @@ checkHour = function(hour, scheduleInfo) {
         return scheduleInfo.addClass("future");
     }
 }
-
+//saves tasks to local storage as a string
 let saveTasks = function() {
      localStorage.setItem("tasks", JSON.stringify(schedule));
 }
@@ -132,6 +132,8 @@ schedule.forEach(function(eachHour) {
     // console.log(saveButton);
     row.append(hour, hourDescription, saveButton);
 })
-
-currentDate = moment().format("dddd MMMM Do"); 
+//set current date and append it to the screen 
+let currentDate = moment().format("dddd MMMM Do"); 
 currentDay.append(currentDate);
+
+// $('.')
